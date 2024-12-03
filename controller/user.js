@@ -1,10 +1,24 @@
 const user = require('../models/user')
+const bcrypt = require('bcrypt')
 
-const createUser = async(req,res)=>{
+const createUser  = async(req,res)=>{
     const data = req.body
-    const object = await user.create(data)
-    res.json({"message":"Object created Successfully",object})
+    const pass = data.password
+    pass = await bcrypt.hash(pass,10)
+    data.password = pass
+    const obj = await user.create(data)
+    res.json(obj) 
 }
+
+// const createUser = async(req,res)=>{
+//     const data = req.body
+//     let pass = data.password;
+
+//     pass = await bcrypt.hash(pass, 10);
+//     data.password = pass;
+//     const object = await user.create(data)
+//     res.json({"message":"Object created Successfully",object})
+// }
 
 const getAllUsers = async(req,res)=>{
 const object = await user.find({})
